@@ -5,24 +5,54 @@ const store = {
   // 5 or more questions are required
   questions: [
     {
-      question: 'What color is broccoli?',
+      question: 'In what year did the first World Cup take place?',
       answers: [
-        'red',
-        'orange',
-        'pink',
-        'green'
+        '1930',
+        '1925',
+        '1934',
+        '1937'
       ],
-      correctAnswer: 'green'
+      correctAnswer: '1930'
     },
     {
-      question: 'What is the current year?',
+      question: 'What country has the most World Cup wins?',
       answers: [
-        '1970',
-        '2015',
-        '2019',
-        '2005'
+        'France',
+        'Brazil',
+        'Argentina',
+        'Germany'
       ],
-      correctAnswer: '2019'
+      correctAnswer: 'Brazil'
+    },
+    {
+      question: 'What player has scored the most goals in World Cup history?',
+      answers: [
+        'Lionel Messi',
+        'Christiano Ronaldo',
+        'Miroslav Klose',
+        'David Beckham'
+      ],
+      correctAnswer: 'Miroslav Klose'
+    },
+    {
+      question: 'What year did the United States host the World Cup?',
+      answers: [
+        '1990',
+        '1986',
+        '1994',
+        '2010'
+      ],
+      correctAnswer: '1994'
+    },
+    {
+      question: 'What country is hosting the 2022 World cup?',
+      answers: [
+        'Qatar',
+        'Japan',
+        'South Korea',
+        'Australia'
+      ],
+      correctAnswer: 'Qatar'
     }
   ],
   quizStarted: false,
