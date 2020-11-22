@@ -78,11 +78,85 @@ const store = {
 /********** TEMPLATE GENERATION FUNCTIONS **********/
 
 // These functions return HTML templates
+// Generate intro
+function generateIntro () {  
+  return `<section id="start-content">
+            <p id="intro-text">Put your knowledge of World Cup history to the test with this fun quiz!</p>
+            <button id="start-quiz">Start Quiz</button>
+          </section>`
+}
+
+// Generate question
+function generateQuestion () {
+
+}
+
+// Generate answer choices
+function generateAnswerChoices () {
+
+}
+
+// Generate correct answer
+function generateCorrectAnswer () {
+
+}
+
+// Generate question number and score
+function generateCurrentQuestionNumAndScore () {
+
+}
+
+// Generate final results
+function generateFinalResults () {
+
+}
 
 /********** RENDER FUNCTION(S) **********/
 
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
+function render () {
+
+}
 
 /********** EVENT HANDLER FUNCTIONS **********/
 
 // These functions handle events (submit, click, etc)
+// Handle 'start quiz' button
+function handleStartQuiz () {
+  console.log("Starting Quiz");
+
+}
+
+// Handle 'answer' submit
+function handleAnswerSubmit () {
+  console.log("Submitting Answer");
+  
+}
+
+// Handle 'next question' button
+function handleNextQuestion () {
+  console.log("Showing next question");
+
+}
+
+// Reset data values
+function resetValues () {
+  console.log("Resetting Values");
+
+}
+
+// Handle 'restart quiz' button 
+function handleRestartQuiz () {
+  console.log("Restarting Quiz");
+
+}
+
+function initQuizApp () {
+  render();
+  handleStartQuiz();
+  handleAnswerSubmit();
+  handleNextQuestion();
+  handleRestartQuiz();
+}
+
+$(initQuizApp);
