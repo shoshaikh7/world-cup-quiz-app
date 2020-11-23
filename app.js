@@ -80,20 +80,41 @@ const store = {
 // These functions return HTML templates
 // Generate intro
 function generateIntro () {  
-  return `<section id="start-content">
-            <p id="intro-text">Put your knowledge of World Cup history to the test with this fun quiz!</p>
-            <button id="start-quiz">Start Quiz</button>
-          </section>`
-}
-
-// Generate question
-function generateQuestion () {
-
+  const introTemplate = `<section id="start-content">
+                          <p id="intro-text">Put your knowledge of World Cup history to the test with this fun quiz!</p>
+                          <button id="js-start-quiz">Start Quiz</button>
+                        </section>`
+  return introTemplate;
 }
 
 // Generate answer choices
 function generateAnswerChoices () {
+  let answerChoices = store.questions[store.questionNumber].answers;
+  let questionCounter = 0;
+  let answerTemplate = ''
 
+  console.log(answerChoices);
+  for (let i = 0; i < answerChoices.length; i++) {
+    answerTemplate += `<button class="js-answer-choice" id="js-choice-${i + 1}">${answerChoices[i]}</button>`
+
+  }
+  return answerTemplate;
+}
+
+// Generate question
+function generateQuestion () {
+  let currentQuestion = store.questions[store.questionNumber].question;
+  console.log(currentQuestion);
+  const questionTemplate = `<form id="js-question-form>
+                              <div id="js-question">
+                                ${currentQuestion}
+                              </div>
+                              <div id="js-answer-choices">
+                                ${generateAnswerChoices()}                              
+                              </div>
+                            </form>`
+
+  return questionTemplate;
 }
 
 // Generate correct answer
@@ -115,7 +136,19 @@ function generateFinalResults () {
 
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
 function render () {
+  if (store.quizStarted === false) {
+    // If 'quizStarted === false' show intro
+    $('main').html(generateIntro());
+    return;
+  } else if (store.questionNumber < store.questions.length) {
+    // else if 'questionNumber < questions.length'
+    // show question, answers choices, and question number/score
+    $('main').html(generateQuestion());
 
+  } else {
+    // else show final results
+
+  }  
 }
 
 /********** EVENT HANDLER FUNCTIONS **********/
@@ -124,7 +157,10 @@ function render () {
 // Handle 'start quiz' button
 function handleStartQuiz () {
   console.log("Starting Quiz");
-
+  $('main').on('click', '#js-start-quiz', e => {
+    store.quizStarted = true;
+    render();
+  });
 }
 
 // Handle 'answer' submit
