@@ -120,7 +120,7 @@ function generateCorrectAnswer (status) {
 
 // Generate question number and score
 function generateCurrentQuestionNumAndScore () {
-  let questionNumAndScore = `<section id="js-question-and-score"><p id="js-question-num">${store.questionNumber + 1}/${store.questions.length}</p><p id="js-score">${store.score}/${store.questions.length}</p></section>`
+  let questionNumAndScore = `<section id="js-question-and-score"><p id="js-question-num">Question: ${store.questionNumber + 1}/${store.questions.length}</p><p id="js-score">Score: ${store.score}/${store.questions.length}</p></section>`
   return questionNumAndScore;
 }
 
@@ -140,14 +140,12 @@ function render () {
     $('main').html(generateIntro());        
   } else if (store.questionNumber >= 0 && store.questionNumber < store.questions.length) {
     // else if 'questionNumber < questions.length'
-    // show question, answers choices, and question number/score
-    newHtml = generateQuestion();
-    newHtml += generateCurrentQuestionNumAndScore();
+    // show question, answers choices, and question number/score    
+    newHtml = generateCurrentQuestionNumAndScore();
+    newHtml += generateQuestion();
     $('main').html(newHtml);
-
   } else {
     $('main').html(generateFinalResults());
-
   }  
 }
 
@@ -170,19 +168,18 @@ function handleAnswerSubmit () {
     let selectedAnswer = $(e.currentTarget).html();       
     // Creat a container to render answer status     
     let answerStatusContainer = '<div class="js-answer-status"></div>'
-    $('main').append(answerStatusContainer);
-
+    $('main').append(answerStatusContainer);    
     // Check if the user answer is correct or not
     if (correctAnswer === selectedAnswer) {      
       store.score++      
-      $('#js-score').html(`${store.score}/${store.questions.length}`);
+      $('#js-score').html(`Score: ${store.score}/${store.questions.length}`);
       $('.js-answer-status').append(generateCorrectAnswer("Correct"));
+      $(e.currentTarget).css({"color": "#27ae60", "border-color": "#27ae60"});
     } else {
-      $('.js-answer-status').append(generateCorrectAnswer("Incorrect"));
-    }
-    console.log(store.questionNumber)
-    store.questionNumber++;
-    console.log(store.questionNumber)
+      $('.js-answer-status').append(generateCorrectAnswer("Incorrect"));            
+      $(e.currentTarget).css({"color": "#c0392b", "border-color": "#c0392b"});
+    }    
+    store.questionNumber++;    
     // Disable buttons so user can't select a new answer for the same question
     $(e.currentTarget).prop('disabled', true);
     $(e.currentTarget).siblings().prop('disabled', true);
