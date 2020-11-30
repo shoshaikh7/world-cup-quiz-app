@@ -80,7 +80,7 @@ const store = {
 // These functions return HTML templates
 // Generate intro
 function generateIntro () {  
-  const introTemplate = `<section id="start-content">
+  const introTemplate = `<section id="intro">
                           <p id="intro-text">Put your knowledge of World Cup history to the test with this fun quiz!</p>
                           <button id="js-start-quiz">Start Quiz</button>
                         </section>`
@@ -89,11 +89,9 @@ function generateIntro () {
 
 // Generate answer choices
 function generateAnswerChoices () {
-  let answerChoices = store.questions[store.questionNumber].answers;
-  let questionCounter = 0;
-  let answerTemplate = ''
-
-  console.log(answerChoices);
+  let answerChoices = store.questions[store.questionNumber].answers;  
+  let answerTemplate = '';
+  
   for (let i = 0; i < answerChoices.length; i++) {
     answerTemplate += `<button class="js-answer-choice" id="js-choice-${i + 1}">${answerChoices[i]}</button>`
 
@@ -103,28 +101,27 @@ function generateAnswerChoices () {
 
 // Generate question
 function generateQuestion () {
-  let currentQuestion = store.questions[store.questionNumber].question;
-  console.log(currentQuestion);
-  const questionTemplate = `<form id="js-question-form>
-                              <div id="js-question">
-                                ${currentQuestion}
-                              </div>
-                              <div id="js-answer-choices">
-                                ${generateAnswerChoices()}                              
-                              </div>
-                            </form>`
-
+  let currentQuestion = store.questions[store.questionNumber];  
+  const questionTemplate = `<section id="questions"><form id="js-question-form"><div id="js-question">${currentQuestion.question}</div><div id="js-answer-choices">${generateAnswerChoices()}</div><div id="js-next-button-container"><button id="js-next-button">Next</button></div></form></section>`  
   return questionTemplate;
 }
 
 // Generate correct answer
-function generateCorrectAnswer () {
-
+function generateCorrectAnswer (status) {
+  let correctAnswer = store.questions[store.questionNumber];
+  let correctAnswerHtml = '';
+  if (status === "Correct") {
+    correctAnswerHtml = `<div id="correct-answer">You are correct!</div>`
+  } else {
+    correctAnswerHtml = `<div id="incorrect-answer">Sorry! That is incorrect. The correct answer is ${correctAnswer.correctAnswer}.</div>`
+  }
+  return correctAnswerHtml;
 }
 
 // Generate question number and score
 function generateCurrentQuestionNumAndScore () {
-
+  let questionNumAndScore = `<section id="js-question-and-score"><p id="js-question-num">${store.questionNumber + 1}/${store.questions.length}</p><p id="js-score">${store.score}/${store.questions.length}</p></section>`
+  return questionNumAndScore;
 }
 
 // Generate final results
@@ -136,17 +133,19 @@ function generateFinalResults () {
 
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
 function render () {
+  let newHtml = '';  
   if (store.quizStarted === false) {
-    // If 'quizStarted === false' show intro
-    $('main').html(generateIntro());
-    return;
-  } else if (store.questionNumber < store.questions.length) {
+    // If 'quizStarted === false' show intro    
+    $('main').html(generateIntro());        
+  } else if (store.questionNumber >= 0 && store.questionNumber < store.questions.length) {
     // else if 'questionNumber < questions.length'
     // show question, answers choices, and question number/score
-    $('main').html(generateQuestion());
+    newHtml = generateQuestion();
+    newHtml += generateCurrentQuestionNumAndScore();
+    $('main').html(newHtml);
 
   } else {
-    // else show final results
+    $('main').html('blah');
 
   }  
 }
@@ -155,35 +154,61 @@ function render () {
 
 // These functions handle events (submit, click, etc)
 // Handle 'start quiz' button
-function handleStartQuiz () {
-  console.log("Starting Quiz");
-  $('main').on('click', '#js-start-quiz', e => {
+function handleStartQuiz () {  
+  $('main').on('click', '#js-start-quiz', e => {    
     store.quizStarted = true;
     render();
   });
 }
 
 // Handle 'answer' submit
-function handleAnswerSubmit () {
-  console.log("Submitting Answer");
-  
+function handleAnswerSubmit () {  
+  $('main').on('click', '.js-answer-choice', e => {
+    e.preventDefault();    
+    let correctAnswer = store.questions[store.questionNumber].correctAnswer;
+    let selectedAnswer = $(e.currentTarget).html();       
+    // Creat a container to render answer status     
+    let answerStatusContainer = '<div class="js-answer-status"></div>'
+    $('main').append(answerStatusContainer);
+
+    // Check if the user answer is correct or not
+    if (correctAnswer === selectedAnswer) {      
+      store.score++      
+      $('#js-score').html(`${store.score}/${store.questions.length}`);
+      $('.js-answer-status').append(generateCorrectAnswer("Correct"));
+    } else {
+      $('.js-answer-status').append(generateCorrectAnswer("Incorrect"));
+    }
+    console.log(store.questionNumber)
+    store.questionNumber++;
+    console.log(store.questionNumber)
+    // Disable buttons so user can't select a new answer for the same question
+    $(e.currentTarget).prop('disabled', true);
+    $(e.currentTarget).siblings().prop('disabled', true);
+    
+    // Show next button
+    $('#js-next-button').show();
+
+  });
 }
 
 // Handle 'next question' button
 function handleNextQuestion () {
-  console.log("Showing next question");
-
+  $('main').on('click', '#js-next-button', e => {     
+    e.preventDefault();     
+    render();
+  });
 }
 
 // Reset data values
 function resetValues () {
-  console.log("Resetting Values");
+  
 
 }
 
 // Handle 'restart quiz' button 
 function handleRestartQuiz () {
-  console.log("Restarting Quiz");
+  
 
 }
 
