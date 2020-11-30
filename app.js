@@ -102,7 +102,7 @@ function generateAnswerChoices () {
 // Generate question
 function generateQuestion () {
   let currentQuestion = store.questions[store.questionNumber];  
-  const questionTemplate = `<section id="questions"><form id="js-question-form"><div id="js-question">${currentQuestion.question}</div><div id="js-answer-choices">${generateAnswerChoices()}</div><div id="js-next-button-container"><button id="js-next-button">Next</button></div></form></section>`  
+  const questionTemplate = `<section id="questions"><form id="js-question-form"><div id="js-question">${currentQuestion.question}</div><div id="js-answer-choices">${generateAnswerChoices()}</div><div id="js-next-container"><button id="js-next">Next</button></div></form></section>`  
   return questionTemplate;
 }
 
@@ -126,7 +126,8 @@ function generateCurrentQuestionNumAndScore () {
 
 // Generate final results
 function generateFinalResults () {
-
+  const finalResultsTemplate = `<section id="final-results"><p>Your final score is ${store.score}/${store.questions.length}</p><div id="js-restart-container"><button id="js-restart">Restart Quiz</button></div></section>`
+  return finalResultsTemplate;
 }
 
 /********** RENDER FUNCTION(S) **********/
@@ -145,7 +146,7 @@ function render () {
     $('main').html(newHtml);
 
   } else {
-    $('main').html('blah');
+    $('main').html(generateFinalResults());
 
   }  
 }
@@ -187,29 +188,32 @@ function handleAnswerSubmit () {
     $(e.currentTarget).siblings().prop('disabled', true);
     
     // Show next button
-    $('#js-next-button').show();
+    $('#js-next').show();
 
   });
 }
 
 // Handle 'next question' button
 function handleNextQuestion () {
-  $('main').on('click', '#js-next-button', e => {     
-    e.preventDefault();     
+  $('main').on('click', '#js-next', e => {     
+    e.preventDefault();
     render();
   });
 }
 
 // Reset data values
-function resetValues () {
-  
-
+function resetValues () {  
+  store.quizStarted = false;
+  store.questionNumber = 0;
+  store.score = 0;
 }
 
 // Handle 'restart quiz' button 
 function handleRestartQuiz () {
-  
-
+  $('main').on('click', '#js-restart', e => {
+    resetValues();
+    render();
+  });
 }
 
 function initQuizApp () {
